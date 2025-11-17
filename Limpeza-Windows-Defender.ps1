@@ -8,21 +8,28 @@ Add-Type -AssemblyName Microsoft.VisualBasic
 # ========================================
 # PARAMETROS (CORRIGIDO: param() no início)
 # ========================================
-param(
-    [switch]$SafeMode,
-    [switch]$Quiet,
-    [switch]$CleanAll,
-    [string]$LogPath = "$env:TEMP\CleanDefender.log"
-)
-
+# ========================================
+# CONFIGURACAO AUTOMATICA
+# ========================================
+# Script detecta automaticamente o modo de arranque (Safe Mode)
+# e ajusta as opcoes disponiveis para proteger o Windows Defender
 # ConfiguraÃ§Ã£o de execuÃ§Ã£o
 $ErrorActionPreference = "Stop"
 $WarningPreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
 # VerificaÃ§Ã£o de modo de seguranÃ§a e carregamento condicional de assemblies
-$isSafeMode = [bool]$SafeMode
-
+# Detecao automatica de Safe Mode
+try {
+    $bootState = (Get-WmiObject -Class Win32_ComputerSystem -ErrorAction Stop).BootupState
+    $isSafeMode = ($bootState -match "Fail-safe")
+    if ($isSafeMode) {
+        Write-Log -Message "Sistema detectado em MODO SEGURO - Opcoes restritas ativadas" -Level WARNING -ShowInConsole
+    }
+} catch {
+    $isSafeMode = $false
+    Write-Log -Message "Nao foi possivel detectar modo de arranque. Assumindo modo normal." -Level WARNING
+}
 try {
     if (-not $isSafeMode) {
         Add-Type -AssemblyName System.Windows.Forms -ErrorAction Stop
@@ -74,27 +81,13 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     $message = "Este aplicativo requer privilÃ©gios de administrador."
     Write-Log -Message $message -Level ERROR -ShowInConsole
     
-    if (-not $isSafeMode -and -not $Quiet) {
-        try {
-            [System.Windows.Forms.MessageBox]::Show($message, "ElevaÃ§Ã£o NecessÃ¡ria", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Warning)
-        } catch {}
-    }
-    
-    if (-not $Quiet) {
-        $arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$($MyInvocation.MyCommand.Path)`" -LogPath `"$LogPath`""
-        if ($SafeMode) { $arguments += " -SafeMode" }
-        if ($CleanAll) { $arguments += " -CleanAll" }
-        
-        try {
-            Start-Process powershell -ArgumentList $arguments -Verb RunAs -Wait
-        } catch {
-            Write-Host "Falha ao elevar privilÃ©gios: $($_.Exception.Message)" -ForegroundColor Red
-        }
-        exit
-    } else {
-        exit 1
-    }
-}
+    # =================================================================
+# NOTA: Bloco reservado para futura implementacao de modo console
+# =================================================================
+# Este espaco esta reservado para adicionar interface de linha de
+# comandos (CLI) no futuro, se necessario. Por enquanto, o script
+# funciona apenas com interface grafica (GUI).
+# =================================================================
 
 # Verificar integridade do Windows Defender
 function Test-DefenderIntegrity {
