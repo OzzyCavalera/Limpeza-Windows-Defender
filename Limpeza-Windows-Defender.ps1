@@ -17,6 +17,7 @@ Add-Type -AssemblyName Microsoft.VisualBasic
 $ErrorActionPreference = "Stop"
 $WarningPreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
+$script:LogPath = Join-Path ([Environment]::GetFolderPath('Desktop')) "CleanDefender.log"
 
 # VerificaÃ§Ã£o de modo de seguranÃ§a e carregamento condicional de assemblies
 # Detecao automatica de Safe Mode
@@ -62,7 +63,7 @@ function Write-Log {
         Add-Content -Path $LogPath -Value $logEntry -ErrorAction Stop
     } catch {
         try {
-            Add-Content -Path "$env:TEMP\CleanDefender_fallback.log" -Value $logEntry -ErrorAction Stop
+            Add-Content -Path (Join-Path ([Environment]::GetFolderPath('Desktop')) "CleanDefender_fallback.log") -Vlue $logEntry -ErrorAction Stop
         } catch {}
     }
     
