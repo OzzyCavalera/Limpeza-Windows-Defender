@@ -80,7 +80,8 @@ function Write-Log {
 if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
     $message = "Este aplicativo requer privilÃ©gios de administrador."
     Write-Log -Message $message -Level ERROR -ShowInConsole
-    
+
+    }
     # =================================================================
 # NOTA: Bloco reservado para futura implementacao de modo console
 # =================================================================
