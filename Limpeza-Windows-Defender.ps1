@@ -1030,6 +1030,7 @@ $viewLogButton.Add_Click({
         [System.Windows.Forms.MessageBox]::Show("Nao foi possivel abrir o arquivo de log: $($_.Exception.Message)", "Erro", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Error)
     }
 })
+$form.Controls.Add($viewLogButton)
 # VerificaÃ§Ã£o de integridade ao iniciar
 if (-not (Test-DefenderIntegrity)) {
     $message = "Windows Defender nao foi detectado neste sistema. A limpeza pode nao ser eficaz."
